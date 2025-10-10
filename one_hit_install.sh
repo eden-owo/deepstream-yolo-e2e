@@ -54,7 +54,7 @@ fi
 
 # Compile the nvdsinfer_yolo function used by PGIE
 cd /apps/deepstream-yolo-e2e || exit
-bash scripts/compile_nvdsinfer_yolo.sh
+scripts/compile_nvdsinfer_yolo.sh
 if [ $? -ne 0 ]; then
     echo "Failed to compile nvdsinfer_yolo function."
     exit 1
@@ -62,7 +62,7 @@ fi
 
 # Apply the patch to the nvinfer library
 cd /apps/deepstream-yolo-e2e/TensorRTPlugin || exit
-bash ./patch_libnvinfer.sh
+./patch_libnvinfer.sh
 if [ $? -ne 0 ]; then
     echo "Failed to apply patch to the nvinfer library."
     exit 1
@@ -75,9 +75,16 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-pip3 install yt-dlp prettytable
+pip3 install yt-dlp prettytable requests
 if [ $? -ne 0 ]; then
-    echo "Failed to install yt-dlp and prettytable."
+    echo "Failed to install yt-dlp, prettytable and requests."
+    exit 1
+fi
+
+# Install correct version of cuda-python to avoid import errors
+pip3 install cuda-python==12.6.0
+if [ $? -ne 0 ]; then
+    echo "Failed to install cuda-python 12.6.0."
     exit 1
 fi
 
